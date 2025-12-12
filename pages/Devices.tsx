@@ -23,6 +23,35 @@ const TRAIL_ORDER = [
   'chroma'        // Chroma Key
 ];
 
+// Top-Down Futuristic Boat Component
+const TopDownBoat = () => (
+  <div className="relative w-20 h-28 drop-shadow-[0_0_20px_rgba(34,197,94,0.8)] animate-bounce-slow z-50">
+    <svg viewBox="0 0 60 100" className="w-full h-full overflow-visible">
+      {/* Water Wake / Thrust trail */}
+      <path d="M10 -20 Q30 -5 50 -20 L30 10 Z" fill="rgba(34,197,94,0.4)" className="animate-pulse" />
+      
+      {/* Thrusters */}
+      <rect x="12" y="5" width="10" height="20" rx="4" fill="#1f2937" stroke="#4ade80" strokeWidth="1" />
+      <rect x="38" y="5" width="10" height="20" rx="4" fill="#1f2937" stroke="#4ade80" strokeWidth="1" />
+      
+      {/* Main Hull - Playful bubbly shape */}
+      <path d="M10 20 L50 20 L58 70 Q30 110 2 70 L10 20 Z" fill="#f3f4f6" stroke="#16a34a" strokeWidth="3" />
+      
+      {/* Central Core / Cockpit */}
+      <circle cx="30" cy="50" r="14" fill="#111827" />
+      <circle cx="30" cy="50" r="10" fill="#4ade80" className="animate-ping opacity-75" />
+      <circle cx="30" cy="50" r="8" fill="#22c55e" />
+      
+      {/* Circuit Lines on Hull */}
+      <path d="M30 65 L30 95" stroke="#22c55e" strokeWidth="3" strokeLinecap="round" />
+      
+      {/* Front Eyes/Sensor (Making it look like a face/robot) */}
+      <circle cx="20" cy="35" r="3" fill="#3b82f6" />
+      <circle cx="40" cy="35" r="3" fill="#3b82f6" />
+    </svg>
+  </div>
+);
+
 export const Devices: React.FC<DevicesProps> = ({ onSelectDevice }) => {
   const [activeStep, setActiveStep] = useState<number>(-1); 
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -43,54 +72,59 @@ export const Devices: React.FC<DevicesProps> = ({ onSelectDevice }) => {
   };
 
   return (
-    <div className="flex flex-col gap-8 pb-32 relative overflow-hidden bg-gray-50 min-h-screen">
+    <div className="flex flex-col gap-8 pb-40 relative overflow-hidden bg-gray-50 min-h-screen">
       
       {/* --- TECH MAP DECORATIONS --- */}
-      
-      {/* Circuit Pattern Overlay */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{ 
+      <div className="absolute inset-0 opacity-[0.04]" style={{ 
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` 
         }}>
       </div>
-
-      {/* Floating Tech Icons */}
-      <div className="absolute top-20 right-10 text-wit-200 pointer-events-none animate-pulse"><Wifi size={80} /></div>
-      <div className="absolute top-[40%] left-5 text-wit-200 pointer-events-none"><Binary size={60} /></div>
-      <div className="absolute bottom-40 right-20 text-wit-200 pointer-events-none"><Cpu size={100} /></div>
+      <div className="absolute top-20 right-10 text-wit-300 pointer-events-none animate-bounce delay-700"><Wifi size={60} /></div>
+      <div className="absolute top-[40%] left-5 text-wit-300 pointer-events-none animate-pulse"><Binary size={50} /></div>
       
-      {/* --- CONTENT --- */}
-
-      {/* Map Header */}
-      <div className="text-center mb-4 relative z-10 pt-6">
-        <div className="inline-block bg-white px-8 py-4 rounded-lg shadow-[0_4px_0_rgba(34,197,94,0.4)] border-2 border-wit-500">
-            <h2 className="text-3xl md:text-4xl font-black text-wit-900 tracking-tight flex items-center justify-center gap-3 uppercase font-mono">
-                <MapIcon className="text-wit-600" size={32} />
+      {/* --- HEADER --- */}
+      <div className="text-center mb-4 relative z-10 pt-8 px-4">
+        <div className="inline-block bg-white px-8 py-6 rounded-3xl shadow-[0_8px_0_#16a34a] border-4 border-wit-500 transform hover:scale-105 transition-transform">
+            <h2 className="text-3xl md:text-5xl font-black text-wit-900 tracking-tight flex flex-col md:flex-row items-center justify-center gap-3 uppercase font-mono">
+                <MapIcon className="text-wit-600 w-10 h-10 md:w-12 md:h-12" />
                 Circuito WIT
             </h2>
-            <p className="text-wit-600 font-bold mt-1 font-mono text-sm tracking-wide">Nível: Iniciante &gt; Explorando Hardware</p>
+            <p className="text-wit-700 font-bold mt-2 font-mono text-base md:text-lg bg-wit-100 px-4 py-1 rounded-full">
+                Nível: Explorador de Hardware
+            </p>
         </div>
       </div>
 
-      {/* The Map Container */}
-      <div className="relative max-w-4xl mx-auto w-full px-4 mt-12">
+      {/* --- THE CIRCUIT MAP --- */}
+      <div className="relative max-w-5xl mx-auto w-full px-4 mt-8">
         
         {/* START NODE */}
-        <div className="absolute left-1/2 -translate-x-1/2 -top-16 z-10 flex flex-col items-center">
-            <div className="bg-wit-100 p-3 rounded-lg border-2 border-wit-500 shadow-md">
-                <Server size={32} className="text-wit-700" />
-            </div>
-            <span className="bg-wit-800 text-wit-50 text-xs font-bold px-3 py-1 rounded mt-2 shadow-sm uppercase tracking-widest font-mono">Início</span>
-        </div>
-
-        {/* THE PATH (Circuit Line) */}
-        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-2 -translate-x-1/2 md:translate-x-0 z-0">
-            {/* The colored road - Neon Green Line */}
-            <div className="w-full h-full bg-wit-200 border-x-2 border-wit-300 relative">
-                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-wit-400 to-transparent opacity-50 animate-pulse"></div>
+        <div className="flex justify-center mb-12 relative z-10">
+            <div className="flex flex-col items-center">
+                <div className="bg-wit-100 p-4 rounded-2xl border-4 border-wit-500 shadow-xl animate-bounce-slow">
+                    <Server size={40} className="text-wit-700" />
+                </div>
+                <div className="h-8 w-4 bg-wit-300"></div> {/* Connector to line */}
+                <span className="bg-wit-800 text-wit-50 text-xs font-bold px-4 py-1 rounded-full -mt-2 shadow-sm uppercase tracking-widest font-mono z-20">Início</span>
             </div>
         </div>
 
-        <div className="flex flex-col gap-28 relative z-10 pt-8">
+        {/* THE PATH (Background Line) */}
+        {/* We place this absolutely, centered, to run behind everything */}
+        <div className="absolute left-8 md:left-1/2 top-20 bottom-0 w-6 -translate-x-1/2 md:translate-x-0 z-0 hidden md:block">
+            <div className="w-full h-full bg-wit-100 border-x-4 border-wit-300 rounded-full relative overflow-hidden">
+                 {/* Moving Data Particles */}
+                 <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_bottom,transparent,rgba(34,197,94,0.5),transparent)] bg-[length:100%_200px] animate-data-stream"></div>
+            </div>
+        </div>
+        {/* Mobile Line */}
+        <div className="absolute left-8 top-20 bottom-0 w-4 -translate-x-1/2 z-0 md:hidden block">
+            <div className="w-full h-full bg-wit-100 border-x-2 border-wit-300 relative overflow-hidden"></div>
+        </div>
+
+
+        {/* DEVICES LIST */}
+        <div className="flex flex-col gap-24 relative z-10">
             {sortedDevices.map((device, index) => {
                 const Icon = Icons[device.icon as keyof typeof Icons] as React.ElementType;
                 const isActive = activeStep === index;
@@ -98,16 +132,14 @@ export const Devices: React.FC<DevicesProps> = ({ onSelectDevice }) => {
                 const isEven = index % 2 === 0;
 
                 return (
+                    // GRID LAYOUT: Left Content | Line/Node | Right Content
                     <div 
                         key={device.id} 
                         ref={el => itemRefs.current[index] = el}
-                        className={`flex items-center md:justify-between w-full relative min-h-[160px]`}
+                        className="grid grid-cols-[auto_1fr] md:grid-cols-[1fr_120px_1fr] items-center gap-4 md:gap-0 min-h-[180px]"
                     >
-                        {/* LEFT SIDE CONTENT */}
-                        <div className="hidden md:flex w-[42%] justify-end pr-12 relative">
-                            {/* Decor */}
-                            {isEven && <div className="absolute -right-16 top-1/2 -translate-y-1/2 text-wit-200"><Cpu size={48} /></div>}
-                            
+                        {/* LEFT COLUMN (Desktop Only - Even Items) */}
+                        <div className="hidden md:flex justify-end pr-8">
                             {isEven && (
                                 <TreasureCard 
                                     device={device} 
@@ -118,62 +150,68 @@ export const Devices: React.FC<DevicesProps> = ({ onSelectDevice }) => {
                             )}
                         </div>
 
-                        {/* CENTER: The Map Node & Robot Boat */}
-                        <div className="absolute left-4 md:left-1/2 -translate-x-1/2 md:translate-x-0 flex flex-col items-center justify-center w-24 z-20">
-                            
-                            {/* THE ROBOT BOAT */}
+                        {/* CENTER COLUMN (Node + Boat) */}
+                        <div className="relative flex flex-col items-center justify-center h-full pl-4 md:pl-0">
+                             
+                            {/* ROBO-BOAT (Only shows if active) */}
                             <div className={`
-                                absolute -bottom-10 transition-all duration-1000 ease-in-out z-40 pointer-events-none
-                                ${isActive ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-50 translate-y-8'}
+                                absolute z-50 pointer-events-none transition-all duration-1000 ease-in-out
+                                ${isActive ? 'opacity-100 scale-100 top-[-40px]' : 'opacity-0 scale-0 top-0'}
                             `}>
-                                <div className="transform scale-75 origin-bottom drop-shadow-[0_0_15px_rgba(34,197,94,0.5)]">
-                                    <Boat mood="happy" />
-                                </div>
+                                <TopDownBoat />
                             </div>
 
-                            {/* The Node Button (Tech Hexagon-ish or Circle) */}
+                            {/* The Number Node */}
                             <button 
                                 onClick={() => handleStep(index)}
                                 className={`
-                                    relative w-20 h-20 rounded-full border-[4px] flex items-center justify-center shadow-lg transition-all duration-300 z-20 overflow-hidden bg-white
+                                    relative w-20 h-20 md:w-24 md:h-24 rounded-3xl rotate-45 flex items-center justify-center shadow-[0_10px_0_rgba(0,0,0,0.1)] transition-all duration-300 z-20 overflow-visible
                                     ${isActive 
-                                        ? 'border-wit-500 scale-110 shadow-[0_0_20px_rgba(34,197,94,0.6)] ring-4 ring-wit-200' 
+                                        ? 'bg-wit-500 scale-110 shadow-[0_0_30px_rgba(34,197,94,0.6)] border-4 border-white ring-4 ring-wit-300' 
                                         : isPast 
-                                            ? 'border-wit-300 bg-wit-50 text-wit-400' 
-                                            : 'border-gray-200 text-gray-300 hover:border-wit-300'}
+                                            ? 'bg-wit-200 border-4 border-wit-300' 
+                                            : 'bg-white border-4 border-gray-200 hover:border-wit-400 hover:scale-105'}
                                 `}
                             >
-                                {isPast ? (
-                                    <Icons.Check className="w-10 h-10" strokeWidth={4} />
-                                ) : isActive ? (
-                                     <Icon className="text-wit-600 w-10 h-10 animate-pulse relative z-10" />
-                                ) : (
-                                    <span className="font-mono font-bold text-2xl">{index + 1}</span>
-                                )}
+                                <div className="-rotate-45 flex items-center justify-center w-full h-full">
+                                    {isPast ? (
+                                        <Icons.Check className="w-10 h-10 text-wit-600" strokeWidth={4} />
+                                    ) : (
+                                         <div className="flex flex-col items-center">
+                                            {isActive ? (
+                                                <Icon className="text-white w-10 h-10 animate-bounce" />
+                                            ) : (
+                                                <span className={`font-mono font-black text-3xl ${isActive ? 'text-white' : 'text-gray-300'}`}>
+                                                    {index + 1}
+                                                </span>
+                                            )}
+                                         </div>
+                                    )}
+                                </div>
                             </button>
                             
-                            {/* Step Label */}
+                            {/* Status Pill */}
                             {isActive && (
-                                <div className="absolute -bottom-10 whitespace-nowrap bg-wit-600 px-3 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider shadow-md font-mono border border-wit-400">
-                                    Processando...
+                                <div className="absolute -bottom-6 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow-lg border-2 border-yellow-200 z-50 animate-pulse">
+                                    Local Atual
                                 </div>
                             )}
                         </div>
 
-                        {/* RIGHT SIDE CONTENT */}
-                        <div className="flex-1 md:w-[42%] pl-16 md:pl-12 relative">
-                             {!isEven && <div className="hidden md:block absolute -left-16 top-1/2 -translate-y-1/2 text-wit-200"><Zap size={48} /></div>}
-
-                            <div className="md:hidden">
+                        {/* RIGHT COLUMN */}
+                        <div className="flex justify-start md:pl-8">
+                             {/* Mobile: Always show card here */}
+                             <div className="md:hidden w-full">
                                 <TreasureCard 
                                     device={device} 
                                     isActive={isActive} 
                                     onClick={() => handleStep(index)}
                                     align="left"
                                 />
-                            </div>
-                            
-                            <div className="hidden md:block">
+                             </div>
+
+                             {/* Desktop: Show Odd Items here */}
+                            <div className="hidden md:block w-full">
                                 {!isEven && (
                                     <TreasureCard 
                                         device={device} 
@@ -189,86 +227,102 @@ export const Devices: React.FC<DevicesProps> = ({ onSelectDevice }) => {
             })}
 
              {/* DATA VAULT - END */}
-            <div className="flex flex-col items-center justify-center relative z-20 pb-32">
+            <div className="flex flex-col items-center justify-center relative z-20 pb-10">
+                <div className="h-16 w-6 bg-wit-300 mb-[-10px]"></div>
                 <div className={`
-                    relative w-32 h-32 flex items-center justify-center transform transition-all duration-700
+                    relative w-40 h-40 flex items-center justify-center transform transition-all duration-700 cursor-pointer group
                     ${activeStep >= sortedDevices.length - 1 ? 'scale-110' : 'scale-100 opacity-80'}
                 `}>
                      {/* Vault Icon */}
-                     <div className="bg-gradient-to-br from-wit-500 to-wit-700 p-6 rounded-2xl shadow-[0_10px_0_#14532d] border-t border-wit-400 z-10">
-                        <Database size={64} className="text-white drop-shadow-md" />
+                     <div className="bg-gray-800 p-8 rounded-3xl shadow-[0_15px_0_#000] border-b-8 border-gray-950 z-10 group-hover:translate-y-[-5px] transition-transform">
+                        <Database size={64} className="text-wit-400 drop-shadow-md animate-pulse" />
                      </div>
-
-                     {/* Glow */}
-                     <div className="absolute inset-0 bg-wit-400 blur-2xl opacity-40 animate-pulse"></div>
                 </div>
                 
-                <div className="mt-8 bg-gray-900 text-wit-400 font-mono font-bold px-8 py-3 rounded border border-wit-500 shadow-xl uppercase tracking-widest animate-bounce flex items-center gap-2">
-                    <ShieldCheck size={20} className="text-wit-500" />
-                    Dados Coletados!
+                <div className="mt-8 bg-wit-600 text-white font-mono font-bold px-10 py-4 rounded-2xl shadow-[0_6px_0_#14532d] uppercase tracking-widest text-xl flex items-center gap-3">
+                    <ShieldCheck size={28} />
+                    Missão Completa!
                 </div>
             </div>
         </div>
       </div>
 
       {/* Navigation Controls (Floating Tech Bar) */}
-      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-3 bg-white p-2 pr-3 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-2 border-wit-200 z-50 scale-90 md:scale-100">
+      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-3 bg-white/90 backdrop-blur-md p-3 pr-4 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.15)] border-4 border-wit-100 z-50 scale-90 md:scale-100">
         <button 
             onClick={() => handleStep(Math.max(0, activeStep - 1))}
             disabled={activeStep <= 0}
-            className="w-14 h-14 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center disabled:opacity-30 transition-colors border-2 border-gray-300"
+            className="w-16 h-16 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center disabled:opacity-30 transition-colors border-4 border-gray-200 active:scale-95"
         >
-            <ChevronLeft size={32} />
+            <ChevronLeft size={36} />
         </button>
         
-        <div className="px-4 text-center min-w-[120px]">
-            <div className="text-[10px] text-wit-600 font-bold uppercase tracking-wider mb-1 font-mono">Progresso</div>
-            <div className="text-2xl font-black text-gray-800 leading-none font-mono">
-                {activeStep === -1 ? '0' : activeStep + 1}<span className="text-gray-400 text-lg">/{sortedDevices.length}</span>
+        <div className="px-6 text-center min-w-[140px]">
+            <div className="text-[11px] text-wit-600 font-bold uppercase tracking-wider mb-1 font-mono">Progresso</div>
+            <div className="text-3xl font-black text-gray-800 leading-none font-mono">
+                {activeStep === -1 ? '0' : activeStep + 1}<span className="text-gray-400 text-xl">/{sortedDevices.length}</span>
             </div>
         </div>
 
         <button 
             onClick={() => handleStep(Math.min(sortedDevices.length - 1, activeStep + 1))}
             disabled={activeStep >= sortedDevices.length - 1}
-            className="w-14 h-14 rounded-full bg-wit-500 hover:bg-wit-600 text-white flex items-center justify-center disabled:opacity-30 shadow-md transition-colors border-2 border-wit-400"
+            className="w-16 h-16 rounded-full bg-wit-500 hover:bg-wit-600 text-white flex items-center justify-center disabled:opacity-30 shadow-lg transition-colors border-4 border-wit-400 active:scale-95"
         >
-            <ChevronRight size={32} />
+            <ChevronRight size={36} />
         </button>
       </div>
+
+      <style>{`
+        @keyframes data-stream {
+          0% { background-position: 0 0; }
+          100% { background-position: 0 200px; }
+        }
+        .animate-data-stream {
+          animation: data-stream 2s linear infinite;
+        }
+        .animate-bounce-slow {
+          animation: bounce 3s infinite;
+        }
+      `}</style>
 
     </div>
   );
 };
 
-// Component styled like a Digital Tablet/Card
+// Component styled like a Holographic Card
 const TreasureCard = ({ device, isActive, onClick, align }: { device: any, isActive: boolean, onClick: () => void, align: 'left' | 'right' }) => {
     return (
         <div 
             onClick={onClick}
             className={`
-                bg-white rounded-lg p-6 shadow-sm border-2 cursor-pointer transition-all duration-300 relative overflow-hidden group
+                group relative bg-white rounded-2xl p-6 md:p-8 cursor-pointer transition-all duration-300 border-b-8
                 ${isActive 
-                    ? 'border-wit-500 shadow-[0_10px_20px_rgba(34,197,94,0.15)] scale-105 opacity-100 translate-x-0 z-30' 
-                    : 'border-gray-200 hover:border-wit-300 opacity-70 grayscale-[0.5]'}
-                ${align === 'right' ? 'text-right' : 'text-left'}
+                    ? 'border-wit-500 shadow-[0_15px_40px_rgba(34,197,94,0.2)] scale-100 md:scale-105 -translate-y-2 z-30 ring-2 ring-wit-200' 
+                    : 'border-gray-200 hover:border-wit-300 opacity-60 hover:opacity-100 hover:-translate-y-1 grayscale-[0.8] hover:grayscale-0'}
+                ${align === 'right' ? 'md:text-right' : 'md:text-left'}
+                text-left w-full
             `}
         >
-            {/* Tech Header Strip */}
-            <div className={`absolute top-0 left-0 w-full h-1 ${isActive ? 'bg-wit-500' : 'bg-gray-200'}`}></div>
+            {/* Tech Hologram Decor */}
+            <div className={`absolute top-4 ${align === 'right' ? 'left-4' : 'right-4'} text-wit-200`}>
+                <Cpu size={24} className={isActive ? 'animate-spin-slow' : ''} />
+            </div>
 
-            <h3 className={`text-2xl font-black mb-2 leading-tight font-sans ${isActive ? 'text-gray-800' : 'text-gray-400'}`}>
-                {device.name}
-            </h3>
-            <p className="text-gray-600 text-base md:text-lg leading-snug font-medium mb-3 font-mono text-sm">
-                {device.fullDescription}
-            </p>
+            <div className={`flex flex-col ${align === 'right' ? 'md:items-end' : 'md:items-start'}`}>
+                <h3 className={`text-2xl md:text-3xl font-black mb-3 leading-tight font-sans ${isActive ? 'text-gray-800' : 'text-gray-400'}`}>
+                    {device.name}
+                </h3>
+                <p className="text-gray-600 text-lg leading-snug font-medium mb-4 font-mono">
+                    {device.fullDescription}
+                </p>
 
-            {isActive && (
-                <div className={`flex ${align === 'right' ? 'justify-end' : 'justify-start'}`} onClick={(e) => e.stopPropagation()}>
-                    <TTSButton text={`${device.name}. ${device.fullDescription}`} label="Ouvir Dados" />
-                </div>
-            )}
+                {isActive && (
+                    <div className="mt-2" onClick={(e) => e.stopPropagation()}>
+                        <TTSButton text={`${device.name}. ${device.fullDescription}`} label="Ouvir Dados" />
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

@@ -35,7 +35,7 @@ export const WordSearch: React.FC<WordSearchProps> = ({ onFinish }) => {
 
     setWordsToFind(selectedDevices);
     setFoundWords([]);
-    speak("Localize os termos no código.");
+    speak("Encontre as palavras escondidas na grade.");
 
     const newGrid: Cell[][] = Array(GRID_SIZE).fill(null).map((_, y) => 
         Array(GRID_SIZE).fill(null).map((_, x) => ({
@@ -127,12 +127,12 @@ export const WordSearch: React.FC<WordSearchProps> = ({ onFinish }) => {
               const newGrid = [...grid];
               selectedCoords.forEach(c => newGrid[c.y][c.x].found = true);
               setGrid(newGrid);
-              speak(`Termo encontrado: ${word}`);
+              speak(`Palavra encontrada: ${word}`);
               setFoundWords(prev => {
                   const updated = [...prev, word];
                   if (updated.length === wordsToFind.length) {
                       setTimeout(() => {
-                          speak("Análise completa. Bom trabalho.");
+                          speak("Parabéns! Você encontrou todas as palavras.");
                           onFinish();
                       }, 1000);
                   }

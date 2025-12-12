@@ -58,7 +58,8 @@ export const useTTS = () => {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash-preview-tts",
-        contents: [{ parts: [{ text: text }] }],
+        // Force Brazilian Portuguese accent/context
+        contents: [{ parts: [{ text: `Say in Brazilian Portuguese: ${text}` }] }],
         config: {
           responseModalities: [Modality.AUDIO],
           speechConfig: {
